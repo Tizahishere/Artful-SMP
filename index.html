@@ -30,24 +30,31 @@
 
         .background-blob {
             position: fixed;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(191, 85, 236, 0.15) 0%, rgba(0,0,0,0) 70%);
-            top: -100px;
-            right: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(191, 85, 236, 0.2) 0%, rgba(0,0,0,0) 70%);
+            top: -150px;
+            right: -150px;
             z-index: -1;
-            filter: blur(50px);
+            filter: blur(80px);
+            animation: float 10s infinite alternate ease-in-out;
         }
 
         .background-blob-2 {
             position: fixed;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(142, 68, 173, 0.1) 0%, rgba(0,0,0,0) 70%);
-            bottom: -50px;
-            left: -50px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(142, 68, 173, 0.15) 0%, rgba(0,0,0,0) 70%);
+            bottom: -100px;
+            left: -100px;
             z-index: -1;
-            filter: blur(50px);
+            filter: blur(80px);
+            animation: float 12s infinite alternate-reverse ease-in-out;
+        }
+
+        @keyframes float {
+            from { transform: translate(0, 0); }
+            to { transform: translate(50px, 50px); }
         }
 
         nav {
@@ -60,8 +67,14 @@
             top: 0;
             z-index: 100;
             background: rgba(5, 5, 5, 0.8);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            animation: slideDown 0.8s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
         }
 
         .logo {
@@ -69,6 +82,11 @@
             font-weight: 800;
             color: var(--main);
             letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .logo:hover {
+            text-shadow: 0 0 15px var(--main);
         }
 
         .hero {
@@ -91,6 +109,7 @@
             opacity: 0;
             transform: translateY(30px);
             animation: fIn 0.8s forwards;
+            filter: drop-shadow(0 0 20px rgba(191, 85, 236, 0.3));
         }
 
         .hero p {
@@ -117,12 +136,12 @@
             text-decoration: none;
             font-weight: 700;
             font-size: 1.1rem;
-            transition: 0.3s;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 10px 20px rgba(191, 85, 236, 0.2);
         }
 
         .main-btn:hover {
-            transform: translateY(-5px);
+            transform: scale(1.05);
             box-shadow: 0 15px 30px rgba(191, 85, 236, 0.4);
             background: var(--dark-main);
         }
@@ -164,15 +183,15 @@
             padding: 40px;
             border-radius: 24px;
             border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: 0.4s;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
         .f-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-12px) scale(1.02);
             border-color: var(--main);
-            background: linear-gradient(145deg, #181818, #121212);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
         .f-card h3 {
@@ -200,12 +219,23 @@
             border-radius: 30px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.5s;
+        }
+
+        .member:hover {
+            border-color: var(--main);
+            background: #161616;
         }
 
         .member .icon {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 20px;
             display: inline-block;
+            transition: 0.3s;
+        }
+
+        .member:hover .icon {
+            transform: scale(1.2) rotate(5deg);
         }
 
         .member h3 {
@@ -235,12 +265,18 @@
             align-items: center;
             gap: 20px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.4s;
+            position: relative;
         }
 
         .copy-ip:hover {
-            background: rgba(191, 85, 236, 0.05);
+            background: rgba(191, 85, 236, 0.08);
             border-color: var(--main);
+            transform: scale(1.02);
+        }
+
+        .copy-ip:active {
+            transform: scale(0.98);
         }
 
         footer {
@@ -256,8 +292,8 @@
 
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: 1s all ease;
+            transform: translateY(50px);
+            transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .reveal.active {
@@ -268,6 +304,7 @@
         @media (max-width: 768px) {
             .hero h1 { font-size: 3rem; }
             nav { padding: 20px 5%; }
+            .member { width: 100%; }
         }
     </style>
 </head>
@@ -279,8 +316,8 @@
     <nav>
         <div class="logo">ARTFUL SMP</div>
         <div class="nav-links">
-            <a href="#features" style="color: white; text-decoration: none; margin-left: 20px;">Features</a>
-            <a href="#team" style="color: white; text-decoration: none; margin-left: 20px;">Staff</a>
+            <a href="#features" style="color: white; text-decoration: none; margin-left: 20px; font-weight: 500;">Features</a>
+            <a href="#team" style="color: white; text-decoration: none; margin-left: 20px; font-weight: 500;">Staff</a>
         </div>
     </nav>
 
@@ -366,12 +403,12 @@
     </section>
 
     <section id="join" style="display: flex; flex-direction: column; align-items: center;">
-        <h2 class="section-title reveal" style="margin-bottom: 30px;">Ready to Play?</h2>
-        <p class="reveal" style="color: var(--dim); margin-bottom: 40px;">Click below to copy the IP and start your journey.</p>
-        <p class="reveal" style="color: var(--dim); margin-bottom: 40px;">Also Cracked is supported :).</p>
-        <div class="copy-ip reveal" onclick="alert('IP Copied: play.artfulsmp.com')">
-            <span style="font-size: 1.5rem; font-weight: 700;">ArtfulSMP.aternos.me:61014</span>
-            <span style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 8px; font-size: 0.8rem;">COPY</span>
+        <h2 class="section-title reveal" style="margin-bottom: 20px;">Ready to Play?</h2>
+        <p class="reveal" style="color: var(--dim); margin-bottom: 10px;">Click below to copy the IP and start your journey.</p>
+        <p class="reveal" style="color: var(--main); font-weight: 600; margin-bottom: 40px; background: rgba(191, 85, 236, 0.1); padding: 5px 15px; border-radius: 8px;">Cracked Support Enabled :)</p>
+        <div class="copy-ip reveal" onclick="copyIP()">
+            <span id="ip-text" style="font-size: 1.5rem; font-weight: 700;">ArtfulSMP.aternos.me:61014</span>
+            <span id="copy-status" style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 8px; font-size: 0.8rem; transition: 0.3s;">COPY</span>
         </div>
     </section>
 
@@ -391,6 +428,24 @@
                 }
             }
         }
+
+        function copyIP() {
+            const ip = document.getElementById('ip-text').innerText;
+            const status = document.getElementById('copy-status');
+            
+            navigator.clipboard.writeText(ip).then(() => {
+                status.innerText = "COPIED!";
+                status.style.background = "#bf55ec";
+                status.style.color = "white";
+                
+                setTimeout(() => {
+                    status.innerText = "COPY";
+                    status.style.background = "rgba(255,255,255,0.1)";
+                    status.style.color = "white";
+                }, 2000);
+            });
+        }
+
         window.addEventListener("scroll", reveal);
         reveal();
     </script>
