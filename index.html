@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artful SMP | Join the Adventure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main: #bf55ec;
+            --dark-main: #8e44ad;
+            --bg: #050505;
+            --surface: #121212;
+            --text: #ffffff;
+            --dim: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .background-blob {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(191, 85, 236, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -100px;
+            right: -100px;
+            z-index: -1;
+            filter: blur(50px);
+        }
+
+        .background-blob-2 {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(142, 68, 173, 0.1) 0%, rgba(0,0,0,0) 70%);
+            bottom: -50px;
+            left: -50px;
+            z-index: -1;
+            filter: blur(50px);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 8%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--main);
+            letter-spacing: 1px;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 5.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to bottom, #fff 40%, var(--main));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fIn 0.8s forwards;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--dim);
+            max-width: 700px;
+            margin-bottom: 35px;
+            opacity: 0;
+            animation: fIn 0.8s 0.2s forwards;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            animation: fIn 0.8s 0.4s forwards;
+        }
+
+        .main-btn {
+            background: var(--main);
+            color: white;
+            padding: 18px 45px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(191, 85, 236, 0.2);
+        }
+
+        .main-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(191, 85, 236, 0.4);
+            background: var(--dark-main);
+        }
+
+        .sec-btn {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 18px 45px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .sec-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        section {
+            padding: 120px 8%;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .f-card {
+            background: var(--surface);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .f-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--main);
+            background: linear-gradient(145deg, #181818, #121212);
+        }
+
+        .f-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: var(--main);
+        }
+
+        .f-card p {
+            color: var(--dim);
+            line-height: 1.7;
+        }
+
+        .team-section {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .member {
+            background: #121212;
+            width: 400px;
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .member .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .member h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .member span {
+            display: block;
+            color: var(--main);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .member p {
+            color: var(--dim);
+        }
+
+        .copy-ip {
+            background: var(--surface);
+            padding: 25px 50px;
+            border-radius: 20px;
+            border: 2px dashed rgba(191, 85, 236, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .copy-ip:hover {
+            background: rgba(191, 85, 236, 0.05);
+            border-color: var(--main);
+        }
+
+        footer {
+            padding: 60px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #555;
+        }
+
+        @keyframes fIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: 1s all ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            nav { padding: 20px 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-blob"></div>
+    <div class="background-blob-2"></div>
+
+    <nav>
+        <div class="logo">ARTFUL SMP</div>
+        <div class="nav-links">
+            <a href="#features" style="color: white; text-decoration: none; margin-left: 20px;">Features</a>
+            <a href="#team" style="color: white; text-decoration: none; margin-left: 20px;">Staff</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Artful SMP</h1>
+        <p>A high-quality survival experience with a balanced economy, custom features, and a friendly community. Join our fresh map today.</p>
+        <div class="btn-group">
+            <a href="#join" class="main-btn">Play Now</a>
+            <a href="#features" class="sec-btn">Learn More</a>
+        </div>
+    </header>
+
+    <section id="features">
+        <h2 class="section-title reveal">Server Features</h2>
+        <div class="features-grid">
+            <div class="f-card reveal">
+                <h3>Fresh Map</h3>
+                <p>Start your journey on a brand new world with plenty of space to build and explore.</p>
+            </div>
+            <div class="f-card reveal">
+                <h3>Better Teams</h3>
+                <p>Form alliances, create massive bases, and dominate the server with your friends.</p>
+            </div>
+            <div class="f-card reveal">
+                <h3>Custom Homes</h3>
+                <p>Access up to three home locations using <b>/ahome</b> for easy world navigation.</p>
+            </div>
+            <div class="f-card reveal">
+                <h3>Strength SMP</h3>
+                <p>Competitive survival mechanics that reward your progress and power.</p>
+            </div>
+            <div class="f-card reveal">
+                <h3>Economy & Auction</h3>
+                <p>A fully functional economy with a player-run Auction House for easy trading.</p>
+            </div>
+            <div class="f-card reveal">
+                <h3>Veinminer</h3>
+                <p>Gather resources faster than ever by mining entire ore veins in a single click.</p>
+            </div>
+            <div class="f-card reveal">
+                <h3>NoBoom System</h3>
+                <p>Enjoy the game without worrying about creeper griefing or explosive damage to builds.</p>
+            </div>
+            <div class="f-card reveal">
+                <h3>Secure Login</h3>
+                <p>Your items and progress are protected by a secure login system for maximum safety.</p>
+            </div>
+            <div class="f-card reveal">
+                <h3>Starter Bonus</h3>
+                <p>Every new player starts with a cash bonus to get their economy journey moving.</p>
+            </div>
+            <div class="f-card reveal">
+                <h3>Simple TPA</h3>
+                <p>Smooth teleportation with custom action bar countdowns and immersive sounds.</p>
+            </div>
+            <div class="f-card reveal">
+                <h3>Open PvP</h3>
+                <p>Combat is enabled for those who seek the thrill of battle in the wilderness.</p>
+            </div>
+            <div class="f-card reveal">
+                <h3>Optimized Gameplay</h3>
+                <p>Zero lag and high performance scripts ensure your gameplay is always smooth.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="team">
+        <h2 class="section-title reveal">The Team</h2>
+        <div class="team-section">
+            <div class="member reveal">
+                <span class="icon">👑</span>
+                <span>Founder</span>
+                <h3>FireSlowww</h3>
+                <p>The original founder and director of Artful SMP. Oversees all server operations and the server's future.</p>
+            </div>
+            <div class="member reveal">
+                <span class="icon">💻</span>
+                <span>Developer</span>
+                <h3>Underscore</h3>
+                <p>The lead developer responsible for custom Skripts, technical fixes, and making the server unique.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="join" style="display: flex; flex-direction: column; align-items: center;">
+        <h2 class="section-title reveal" style="margin-bottom: 30px;">Ready to Play?</h2>
+        <p class="reveal" style="color: var(--dim); margin-bottom: 40px;">Click below to copy the IP and start your journey.</p>
+        <div class="copy-ip reveal" onclick="alert('IP Copied: play.artfulsmp.com')">
+            <span style="font-size: 1.5rem; font-weight: 700;">play.artfulsmp.com</span>
+            <span style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 8px; font-size: 0.8rem;">COPY</span>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 Artful SMP Team. We are not affiliated with Mojang Studios.
+    </footer>
+
+    <script>
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+    </script>
+
+</body>
+</html>
