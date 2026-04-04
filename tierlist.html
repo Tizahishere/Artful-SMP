@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artful SMP | Rankings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main: #bf55ec;
+            --dark-main: #8e44ad;
+            --bg: #050505;
+            --surface: #121212;
+            --text: #ffffff;
+            --dim: #a0a0a0;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        .background-blob {
+            position: fixed;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(191, 85, 236, 0.2) 0%, rgba(0,0,0,0) 70%);
+            top: -150px; right: -150px; z-index: -1; filter: blur(80px);
+            animation: float 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes float { from { transform: translate(0, 0); } to { transform: translate(50px, 50px); } }
+
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 25px 8%; position: fixed; width: 100%; top: 0; z-index: 100;
+            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--main); letter-spacing: 1px; }
+
+        .hero { min-height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 150px 20px 50px; }
+        .hero h1 { font-family: 'Montserrat', sans-serif; font-size: 4rem; background: linear-gradient(to bottom, #fff 40%, var(--main)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px rgba(191, 85, 236, 0.3)); }
+        .hero p { font-size: 1.2rem; color: var(--dim); margin-top: 10px; }
+
+        section { padding: 40px 8% 120px; }
+        .leaderboard-container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+
+        .player-row {
+            display: flex; align-items: center; background: var(--surface);
+            border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px 30px; transition: 0.4s; gap: 25px;
+        }
+
+        .player-row:hover { border-color: var(--main); transform: scale(1.02); background: #161616; }
+
+        .rank { font-family: 'Montserrat', sans-serif; font-size: 2rem; font-weight: 800; width: 50px; text-align: center; color: var(--dim); }
+        .rank-1 { color: var(--gold); } .rank-2 { color: var(--silver); } .rank-3 { color: var(--bronze); }
+
+        .player-info { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .player-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; }
+        .player-name { font-size: 1.5rem; font-weight: 700; }
+        .player-points { font-size: 1.1rem; font-weight: 800; color: var(--main); background: rgba(191, 85, 236, 0.1); padding: 4px 12px; border-radius: 6px; }
+
+        .gamemodes { display: flex; gap: 10px; flex-wrap: wrap; }
+        .mode-badge { background: #0a0a0a; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; border: 1px solid rgba(255, 255, 255, 0.08); display: flex; gap: 8px; }
+        .mode-name { color: var(--dim); }
+        .mode-tier { color: var(--main); font-weight: 700; text-transform: uppercase; }
+
+        .reveal { opacity: 0; transform: translateY(20px); transition: 0.5s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        footer { padding: 40px; text-align: center; color: #444; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="background-blob"></div>
+
+    <nav><div class="logo">ARTFUL SMP</div></nav>
+
+    <header class="hero">
+        <h1>Leaderboard</h1>
+        <p>Sorted by Total Points across all Gamemodes</p>
+    </header>
+
+    <section>
+        <div class="leaderboard-container" id="leaderboard">
+            </div>
+    </section>
+
+    <footer>&copy; 2026 Artful SMP Team</footer>
+
+    <script>
+
+        const pointsSystem = {
+            "HT1": 100, "LT1": 90,
+            "HT2": 80,  "LT2": 70,
+            "HT3": 60,  "LT3": 50,
+            "HT4": 40,  "LT4": 30,
+            "HT5": 20,  "LT5": 10
+        };
+
+        // ADD PLAYERS HERE FR FR FR FR
+        const players = [
+            { 
+                name: "Underscoreishere", 
+                modes: { "Mace": "HT5", "CPVP": "LT4" } 
+            },
+            { 
+                name: "FireSlowww", 
+                modes: { "Mace": "LT5", "CPVP": "LT5", "Sword": "LT5" } 
+            }
+        ];
+        
+        // Calculate Points
+        players.forEach(p => {
+            p.totalPoints = 0;
+            for (let m in p.modes) {
+                let tierKey = p.modes[m].toUpperCase();
+                p.totalPoints += (pointsSystem[tierKey] || 0);
+            }
+        });
+
+        // idk
+        players.sort((a, b) => b.totalPoints - a.totalPoints);
+
+        const leaderboard = document.getElementById('leaderboard');
+
+        players.forEach((p, i) => {
+            const rank = i + 1;
+            let badges = '';
+            for (let m in p.modes) {
+                badges += `<div class="mode-badge"><span class="mode-name">${m}</span><span class="mode-tier">${p.modes[m]}</span></div>`;
+            }
+
+            const row = document.createElement('div');
+            row.className = 'player-row reveal';
+            row.innerHTML = `
+                <div class="rank ${rank <= 3 ? 'rank-' + rank : ''}">#${rank}</div>
+                <div class="player-info">
+                    <div class="player-header">
+                        <div class="player-name">${p.name}</div>
+                        <div class="player-points">${p.totalPoints} PTS</div>
+                    </div>
+                    <div class="gamemodes">${badges}</div>
+                </div>
+            `;
+            leaderboard.appendChild(row);
+        });
+
+      
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
